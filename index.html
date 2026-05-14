@@ -433,6 +433,16 @@ html, body {
   position: relative;
 }
 
+.home-caption {
+  font-size: 14px;
+  color: var(--muted);
+  font-style: italic;
+  margin-top: -14px;
+  margin-bottom: 18px;
+  text-align: center;
+  opacity: 0.8;
+}
+
 .home-title {
   font-size: clamp(56px, 8vw, 100px);
   font-weight: 900;
@@ -526,7 +536,7 @@ html, body {
 
 .carousel-wrap {
   position: relative;
-  margin-bottom: 32px;
+  margin-bottom: 8px;
   overflow: visible;
   display: flex;
   align-items: center;
@@ -535,8 +545,8 @@ html, body {
 }
 
 .carousel-track-outer {
-  overflow: hidden;
-  padding: 0 44px 12px;
+  overflow: visible;
+  padding: 0 44px 24px;
   width: 100%;
   max-width: 1000px;
 }
@@ -546,6 +556,8 @@ html, body {
   gap: 20px;
   transition: transform 0.5s cubic-bezier(.4,0,.2,1);
   will-change: transform;
+  justify-content: center;
+  width: 100%;
 }
 
 .carousel-card {
@@ -564,7 +576,7 @@ html, body {
 .carousel-card:hover { transform: translateY(-6px); box-shadow: 0 18px 40px rgba(0,0,0,0.6), 0 0 0 2px var(--accent); }
 .carousel-card-img {
   width: 100%;
-  height: 200px;
+  height: 240px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -717,18 +729,20 @@ html, body {
 .games-grid-wrap {
   flex: 1;
   overflow-y: auto;
-  padding: 24px 40px;
+  padding: 20px 24px;
   display: flex;
   justify-content: center;
+  min-width: 0;
 }
 
 .games-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(140px, 160px));
   gap: 16px;
   width: 100%;
   max-width: 1200px;
   align-content: start;
+  justify-content: center;
 }
 
 .gtile {
@@ -739,7 +753,7 @@ html, body {
   background: var(--bg2);
   border: 1px solid var(--border);
   transition: transform 0.18s, box-shadow 0.18s, border-color 0.18s;
-  aspect-ratio: 2/3;
+  aspect-ratio: 1/1;
   display: flex;
   flex-direction: column;
 }
@@ -929,7 +943,8 @@ html, body {
 }
 
 /* ── AI PAGE ── */
-#page-ai { flex-direction: column; overflow: hidden; }
+#page-ai { flex-direction: row !important; overflow: hidden; }
+#page-ai.active { display: flex; }
 
 .ai-chat-area {
   flex: 1;
@@ -951,14 +966,62 @@ html, body {
 .ai-bubble.ai { align-self: flex-start; background: var(--bg2); border: 1px solid var(--border); border-radius: 14px 14px 14px 4px; }
 .ai-bubble.ai .ai-who { font-size: 11px; font-weight: 700; color: var(--accent); margin-bottom: 6px; }
 
-.ai-input-bar {
-  display: flex;
-  gap: 8px;
-  padding: 12px 20px;
-  background: var(--bg2);
+.ai-model-bar {
   border-top: 1px solid var(--border);
   flex-shrink: 0;
+  background: var(--bg1);
 }
+.ai-model-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 8px 12px 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.ai-model-tabs::-webkit-scrollbar { display: none; }
+.ai-model-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  border-radius: 8px 8px 0 0;
+  border: 1px solid var(--border);
+  border-bottom: none;
+  background: var(--bg3);
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'Outfit', sans-serif;
+  white-space: nowrap;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+.ai-model-btn:hover { background: var(--bg4); color: var(--text); }
+.ai-model-btn.active { background: var(--accent); color: var(--bg1); border-color: var(--accent); }
+.ai-model-icon { font-size: 13px; }
+.ai-input-row {
+  display: flex;
+  gap: 8px;
+  padding: 10px 14px 14px;
+  align-items: flex-end;
+}
+.ai-input-row textarea, #ai-input {
+  flex: 1;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 14px;
+  color: var(--text);
+  font-size: 13px;
+  font-family: 'Outfit', sans-serif;
+  outline: none;
+  resize: none;
+  max-height: 120px;
+  transition: border-color 0.15s;
+  line-height: 1.5;
+}
+.ai-input-row textarea:focus, #ai-input:focus { border-color: var(--accent); }
 
 #ai-input {
   flex: 1;
@@ -982,143 +1045,111 @@ html, body {
 @keyframes bounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-8px)} }
 
 /* ── CHAT PAGE ── */
-#page-chat { overflow: hidden; }
+#page-chat {
+  overflow: hidden;
+  flex-direction: row !important;
+}
+#page-chat.active { display: flex; }
 
-#chat-lobby-view {
-  width: 100%; height: 100%;
-  overflow-y: auto;
-  padding: 28px 32px;
+/* Sidebar */
+.chat-sidebar {
+  width: 220px;
+  min-width: 180px;
+  flex-shrink: 0;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
-
-.chat-lobby-title { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
-.chat-lobby-sub { color: var(--muted); font-size: 13px; margin-bottom: 22px; }
-
-.chat-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; max-width: 720px; }
-
-.chat-box {
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 20px;
-}
-
-.chat-box-title { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 14px; }
-
-.room-row {
-  display: flex; align-items: center; gap: 10px;
-  padding: 11px 12px;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: background 0.12s;
-  margin-bottom: 4px;
-}
-.room-row:last-child { margin-bottom: 0; }
-.room-row:hover { background: var(--bg3); }
-.room-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-.room-row-name { flex: 1; font-size: 13px; font-weight: 600; }
-.room-row-count { font-size: 11px; color: var(--muted); }
-
-.private-desc { font-size: 12px; color: var(--muted); line-height: 1.6; margin-bottom: 16px; }
-
-.code-row { display: flex; gap: 5px; margin-bottom: 10px; }
-.cbox {
-  width: 34px; height: 42px;
-  background: var(--bg3);
-  border: 1.5px solid var(--border);
-  border-radius: 7px;
-  text-align: center;
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--text);
-  outline: none;
-  font-family: 'Space Mono', monospace;
-  transition: border-color 0.12s;
-}
-.cbox:focus { border-color: var(--accent); }
-
-.btn-join {
-  padding: 10px 18px;
-  background: var(--accent);
-  border: none;
-  border-radius: 8px;
-  color: #fff;
+.chat-sidebar-header {
+  padding: 14px 14px 10px;
   font-size: 13px;
   font-weight: 700;
-  cursor: pointer;
-  font-family: 'Outfit', sans-serif;
-  transition: opacity 0.12s;
-  margin-bottom: 8px;
-  display: block;
-  width: 100%;
-}
-.btn-join:hover { opacity: 0.85; }
-
-.btn-gen {
-  width: 100%;
-  padding: 8px;
-  background: none;
-  border: 1px solid var(--border);
-  border-radius: 7px;
-  color: var(--muted);
-  font-size: 12px;
-  cursor: pointer;
-  font-family: 'Outfit', sans-serif;
-  transition: all 0.12s;
-}
-.btn-gen:hover { border-color: var(--accent); color: var(--accent); }
-
-/* Chat room view */
-#chat-room-view {
-  display: none;
-  flex-direction: column;
-  width: 100%; height: 100%;
-}
-#chat-room-view.visible { display: flex; }
-
-.chat-header {
-  display: flex; align-items: center; gap: 12px;
-  padding: 12px 20px;
-  background: var(--bg2);
+  color: var(--text);
   border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   flex-shrink: 0;
 }
-
-.back-btn {
-  display: flex; align-items: center; gap: 6px;
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: 7px;
-  padding: 6px 12px;
+.chat-sidebar-section {
+  padding: 10px 14px 4px;
+  font-size: 10px;
+  font-weight: 700;
   color: var(--muted);
-  font-size: 12px;
-  cursor: pointer;
-  font-family: 'Outfit', sans-serif;
-  transition: all 0.12s;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
 }
-.back-btn:hover { color: var(--text); border-color: var(--muted); }
-.back-btn svg { width: 12px; height: 12px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.chat-channel-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  margin: 1px 6px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.12s;
+}
+.chat-channel-row:hover { background: var(--bg3); }
+.chat-channel-row.active { background: var(--accent-glow); color: var(--accent); }
+.ch-hash { font-size: 16px; color: var(--muted); width: 18px; text-align: center; flex-shrink: 0; }
+.ch-name { font-size: 13px; font-weight: 600; flex: 1; }
+.ch-count { font-size: 10px; color: var(--muted); }
 
-.chat-room-name { font-size: 15px; font-weight: 700; flex: 1; }
-.chat-code-tag { font-size: 11px; background: var(--bg3); border: 1px solid var(--border); padding: 3px 9px; border-radius: 999px; color: var(--muted); font-family: 'Space Mono', monospace; }
+/* Main chat area */
+.chat-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.chat-header {
+  padding: 10px 18px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  background: var(--bg1);
+}
+.chat-room-name { font-size: 15px; font-weight: 700; }
+.chat-code-tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  background: var(--bg3);
+  border-radius: 6px;
+  color: var(--muted);
+  font-family: 'Space Mono', monospace;
+}
 
 .chat-msgs {
   flex: 1;
   overflow-y: auto;
-  padding: 16px 20px;
+  padding: 16px 18px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 4px;
 }
 
-.msg-wrap { display: flex; flex-direction: column; gap: 3px; max-width: 65%; }
+.msg-wrap { display: flex; flex-direction: column; max-width: 72%; }
 .msg-wrap.me { align-self: flex-end; align-items: flex-end; }
 .msg-wrap.sys { align-self: center; max-width: 100%; }
-
-.msg-who-row { display: flex; align-items: center; gap: 6px; }
-.msg-who { font-size: 11px; color: var(--muted); font-weight: 600; }
-.msg-title-badge { font-size: 9px; font-weight: 700; padding: 1px 6px; border-radius: 999px; background: var(--accent-glow); color: var(--accent); text-transform: uppercase; letter-spacing: 0.05em; }
+.msg-wrap:not(.me):not(.sys) { align-self: flex-start; align-items: flex-start; }
+.msg-who-row { display: flex; align-items: center; gap: 5px; margin-bottom: 2px; }
+.msg-who { font-size: 11px; font-weight: 700; color: var(--accent); }
+.msg-title-badge {
+  font-size: 9px;
+  padding: 1px 5px;
+  background: var(--accent-glow);
+  border: 1px solid var(--accent);
+  border-radius: 4px;
+  color: var(--accent);
+  font-weight: 700;
+}
 .msg-bub {
   background: var(--bg2);
   border: 1px solid var(--border);
@@ -1127,43 +1158,77 @@ html, body {
   font-size: 13px;
   line-height: 1.5;
   color: var(--text);
+  word-break: break-word;
 }
-.msg-wrap.me .msg-bub { background: var(--accent); border-color: var(--accent); color: #fff; }
+.msg-wrap.me .msg-bub { background: var(--accent); border-color: var(--accent); color: var(--bg1); border-radius: 14px 14px 4px 14px; }
 .msg-wrap.sys .msg-bub { background: none; border: none; color: var(--muted); font-size: 11px; text-align: center; padding: 2px 0; }
+.msg-ts { font-size: 10px; color: var(--muted); margin-top: 2px; opacity: 0; transition: opacity 0.15s; padding: 0 2px; }
+.msg-bub:hover ~ .msg-ts, .msg-wrap:hover .msg-ts { opacity: 1; }
 
 .chat-input-bar {
-  display: flex; gap: 8px;
-  padding: 12px 20px;
-  background: var(--bg2);
-  border-top: 1px solid var(--border);
+  padding: 10px 16px 14px;
+  display: flex;
+  gap: 8px;
   flex-shrink: 0;
+  border-top: 1px solid var(--border);
 }
-
 #msg-input {
   flex: 1;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 9px;
+  border-radius: 10px;
   padding: 10px 14px;
   color: var(--text);
   font-size: 13px;
   font-family: 'Outfit', sans-serif;
   outline: none;
+  transition: border-color 0.15s;
 }
 #msg-input:focus { border-color: var(--accent); }
 
-.send-btn {
-  width: 42px; height: 42px;
-  background: var(--accent);
-  border: none;
-  border-radius: 9px;
-  display: flex; align-items: center; justify-content: center;
-  cursor: pointer;
-  transition: opacity 0.12s;
-  flex-shrink: 0;
+.cbox {
+  width: 28px;
+  height: 34px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  text-align: center;
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 700;
+  font-family: 'Space Mono', monospace;
+  outline: none;
+  transition: border-color 0.15s;
 }
-.send-btn:hover { opacity: 0.85; }
-.send-btn svg { width: 16px; height: 16px; stroke: #fff; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.cbox:focus { border-color: var(--accent); }
+
+.btn-join {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'Outfit', sans-serif;
+  transition: opacity 0.15s;
+}
+.btn-join:hover { opacity: 0.85; }
+.btn-gen {
+  background: var(--bg3);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'Outfit', sans-serif;
+  transition: all 0.15s;
+}
+.btn-gen:hover { border-color: var(--accent); color: var(--accent); }
+.code-row { display: flex; gap: 4px; align-items: center; justify-content: center; }
 
 /* ── PROFILE PAGE ── */
 #page-profile { overflow-y: auto; padding: 32px 36px; flex-direction: column; }
@@ -1765,6 +1830,7 @@ html, body {
     <div class="home-inner">
       <div class="home-hero fade-up">
         <div class="home-title">Trickiest</div>
+        <div class="home-caption" id="home-caption"></div>
         <div class="home-search-wrap">
           <input class="home-search" id="home-search" placeholder="Search the web or enter a URL…" onkeydown="if(event.key==='Enter')homeSearch()">
           <button class="home-search-btn" onclick="homeSearch()">Go</button>
@@ -1847,13 +1913,9 @@ html, body {
         <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
         Pop Out
       </button>
-      <button class="gv-btn" onclick="popoutFullscreen()">
-        <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-        Pop Out ⛶
-      </button>
       <button class="gv-btn" onclick="newWindowGame()">
         <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
-        New Window ⛶
+        New Window
       </button>
       <button class="gv-btn" onclick="refreshGame()">
         <svg viewBox="0 0 24 24"><polyline points="23,4 23,10 17,10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>
@@ -1885,87 +1947,128 @@ html, body {
 
   <!-- AI -->
   <div class="page" id="page-ai">
-    <div class="gameview-toolbar" style="border-bottom:1px solid var(--border);flex-wrap:wrap;gap:8px">
-      <span style="font-size:16px;font-weight:700;flex:1;min-width:120px">🤖 Trickiest AI</span>
-      <input type="password" id="gemini-key-input" placeholder="Paste Gemini API key here…"
-        style="background:var(--bg3);border:1px solid var(--border);border-radius:7px;padding:6px 10px;color:var(--text);font-size:11px;font-family:Outfit,sans-serif;outline:none;width:220px;flex-shrink:0"
-        onkeydown="if(event.key==='Enter')saveGeminiKey()">
-      <button class="gv-btn" onclick="saveGeminiKey()" style="font-size:11px;padding:5px 10px;flex-shrink:0">Save Key</button>
-      <button class="gv-btn" onclick="clearAI()" style="flex-shrink:0">Clear</button>
-    </div>
-    <div class="ai-chat-area" id="ai-chat-area">
-      <div class="ai-bubble ai">
-        <div class="ai-who">Trickiest AI</div>
-        Hey! I'm Trickiest AI, powered by Claude. Ask me anything — homework help, game tips, roasts, whatever.
+    <!-- Sidebar: saved chats list -->
+    <div class="chat-sidebar">
+      <div class="chat-sidebar-header">🤖 AI Chats</div>
+      <div style="padding:8px 10px">
+        <button class="btn-join" onclick="newAIChat()" style="width:100%;font-size:11px;padding:7px;margin-bottom:6px">+ New Chat</button>
+      </div>
+      <div id="ai-chats-list" style="flex:1;overflow-y:auto"></div>
+      <div style="padding:8px 10px;border-top:1px solid var(--border)">
+        <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:5px">API Keys (optional)</div>
+        <input type="password" id="openai-key-input" placeholder="OpenAI key (sk-…)"
+          style="background:var(--bg3);border:1px solid var(--border);border-radius:7px;padding:6px 8px;color:var(--text);font-size:10px;font-family:Outfit,sans-serif;outline:none;width:100%;box-sizing:border-box;margin-bottom:4px"
+          onkeydown="if(event.key==='Enter')saveAPIKeys()">
+        <input type="password" id="gemini-key-input" placeholder="Gemini key (AIza…)"
+          style="background:var(--bg3);border:1px solid var(--border);border-radius:7px;padding:6px 8px;color:var(--text);font-size:10px;font-family:Outfit,sans-serif;outline:none;width:100%;box-sizing:border-box;margin-bottom:5px"
+          onkeydown="if(event.key==='Enter')saveAPIKeys()">
+        <button class="btn-gen" onclick="saveAPIKeys()" style="width:100%;font-size:10px;padding:5px">Save Keys</button>
       </div>
     </div>
-    <div class="ai-input-bar">
-      <textarea id="ai-input" placeholder="Ask me anything…" rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendAI()}"></textarea>
-      <button class="send-btn" onclick="sendAI()">
-        <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22,2 15,22 11,13 2,9"/></svg>
-      </button>
+    <!-- Main AI chat -->
+    <div class="chat-main" style="flex-direction:column">
+      <div class="chat-header" style="justify-content:space-between">
+        <span style="font-weight:700" id="ai-chat-title">Trickiest AI</span>
+        <div style="display:flex;align-items:center;gap:8px">
+          <div style="display:flex;align-items:center;gap:6px">
+            <div id="ai-status-dot" style="width:8px;height:8px;border-radius:50%;background:#666;flex-shrink:0"></div>
+            <span id="ai-status-text" style="font-size:11px;color:var(--muted)">No model</span>
+          </div>
+          <button class="gv-btn" onclick="clearAI()" style="font-size:11px;padding:4px 10px">Clear</button>
+        </div>
+      </div>
+      <div class="ai-chat-area" id="ai-chat-area">
+        <div class="ai-bubble ai">
+          <div class="ai-who">Trickiest AI</div>
+          Hey! I'm Trickiest AI 🤖 Pick a model below and start chatting — ask me anything!
+        </div>
+      </div>
+      <!-- Model selector bar at bottom -->
+      <div class="ai-model-bar">
+        <div class="ai-model-tabs" id="ai-model-tabs">
+          <button class="ai-model-btn active" data-model="gpt-4o-mini" onclick="selectAIModel(this)">
+            <span class="ai-model-icon">⚡</span>GPT-4o mini
+          </button>
+          <button class="ai-model-btn" data-model="gpt-4o" onclick="selectAIModel(this)">
+            <span class="ai-model-icon">🧠</span>GPT-4o
+          </button>
+          <button class="ai-model-btn" data-model="gpt-3.5-turbo" onclick="selectAIModel(this)">
+            <span class="ai-model-icon">💨</span>GPT-3.5
+          </button>
+          <button class="ai-model-btn" data-model="gemini-2.0-flash" onclick="selectAIModel(this)">
+            <span class="ai-model-icon">✨</span>Gemini Flash
+          </button>
+          <button class="ai-model-btn" data-model="gemini-1.5-pro" onclick="selectAIModel(this)">
+            <span class="ai-model-icon">💎</span>Gemini Pro
+          </button>
+        </div>
+        <div class="ai-input-row">
+          <textarea id="ai-input" placeholder="Ask me anything…" rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendAI()}"></textarea>
+          <button class="send-btn" onclick="sendAI()">
+            <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22,2 15,22 11,13 2,9"/></svg>
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 
   <!-- CHAT -->
   <div class="page" id="page-chat">
-    <div id="chat-lobby-view" class="fade-up">
-      <div class="chat-lobby-title">Chatrooms</div>
-      <div class="chat-lobby-sub">Real-time chat. Public rooms are always open.</div>
-      <div id="firebase-status" style="font-size:11px;color:var(--muted);margin-bottom:12px;text-align:center">⏳ Connecting to chat server…</div>
-      <div class="chat-cols">
-        <div class="chat-box">
-          <div class="chat-box-title">Public Rooms</div>
-          <div class="room-row" onclick="joinRoom('general','General 💬',false)">
-            <div class="room-dot" style="background:#4ade80"></div>
-            <span class="room-row-name">General</span>
-            <span class="room-row-count" id="cnt-general">— online</span>
-          </div>
-          <div class="room-row" onclick="joinRoom('gaming','Gaming 🎮',false)">
-            <div class="room-dot" style="background:#fbbf24"></div>
-            <span class="room-row-name">Gaming</span>
-            <span class="room-row-count" id="cnt-gaming">— online</span>
-          </div>
-          <div class="room-row" onclick="joinRoom('random','Random 🎲',false)">
-            <div class="room-dot" style="background:#f87171"></div>
-            <span class="room-row-name">Random</span>
-            <span class="room-row-count" id="cnt-random">— online</span>
-          </div>
-          <div class="room-row" onclick="joinRoom('memes','Memes 💀',false)">
-            <div class="room-dot" style="background:#a78bfa"></div>
-            <span class="room-row-name">Memes</span>
-            <span class="room-row-count" id="cnt-memes">— online</span>
-          </div>
-        </div>
-        <div class="chat-box">
-          <div class="chat-box-title">Private Room</div>
-          <p class="private-desc">Enter a 6-digit code to join a private room. Rooms expire after 2 days of inactivity.</p>
-          <div class="code-row" id="code-row">
-            <input class="cbox" maxlength="1" oninput="cIn(this)" onkeydown="cDel(event,this)">
-            <input class="cbox" maxlength="1" oninput="cIn(this)" onkeydown="cDel(event,this)">
-            <input class="cbox" maxlength="1" oninput="cIn(this)" onkeydown="cDel(event,this)">
-            <input class="cbox" maxlength="1" oninput="cIn(this)" onkeydown="cDel(event,this)">
-            <input class="cbox" maxlength="1" oninput="cIn(this)" onkeydown="cDel(event,this)">
-            <input class="cbox" maxlength="1" oninput="cIn(this)" onkeydown="cDel(event,this)">
-          </div>
-          <button class="btn-join" onclick="joinPrivate()">Join Private Room</button>
-          <button class="btn-gen" onclick="genCode()">Generate New Code</button>
-        </div>
+    <!-- Sidebar: channels + private room -->
+    <div class="chat-sidebar">
+      <div class="chat-sidebar-header">
+        <span>💬 Trickiest Chat</span>
+        <span id="firebase-status-icon" title="Connecting…">⏳</span>
       </div>
+      <div class="chat-sidebar-section">PUBLIC ROOMS</div>
+      <div class="chat-channel-row" id="ch-general" onclick="joinRoom('general','General 💬',false)">
+        <span class="ch-hash">#</span><span class="ch-name">general</span><span class="ch-count" id="cnt-general"></span>
+      </div>
+      <div class="chat-channel-row" id="ch-gaming" onclick="joinRoom('gaming','Gaming 🎮',false)">
+        <span class="ch-hash">#</span><span class="ch-name">gaming</span><span class="ch-count" id="cnt-gaming"></span>
+      </div>
+      <div class="chat-channel-row" id="ch-random" onclick="joinRoom('random','Random 🎲',false)">
+        <span class="ch-hash">#</span><span class="ch-name">random</span><span class="ch-count" id="cnt-random"></span>
+      </div>
+      <div class="chat-channel-row" id="ch-memes" onclick="joinRoom('memes','Memes 💀',false)">
+        <span class="ch-hash">#</span><span class="ch-name">memes</span><span class="ch-count" id="cnt-memes"></span>
+      </div>
+      <div class="chat-sidebar-section" style="margin-top:10px">PRIVATE ROOM</div>
+      <div style="padding:0 12px 8px">
+        <div class="code-row" id="code-row" style="gap:4px;margin-bottom:8px">
+          <input class="cbox" maxlength="1" oninput="cIn(this)" onkeydown="cDel(event,this)">
+          <input class="cbox" maxlength="1" oninput="cIn(this)" onkeydown="cDel(event,this)">
+          <input class="cbox" maxlength="1" oninput="cIn(this)" onkeydown="cDel(event,this)">
+          <input class="cbox" maxlength="1" oninput="cIn(this)" onkeydown="cDel(event,this)">
+          <input class="cbox" maxlength="1" oninput="cIn(this)" onkeydown="cDel(event,this)">
+          <input class="cbox" maxlength="1" oninput="cIn(this)" onkeydown="cDel(event,this)">
+        </div>
+        <button class="btn-join" onclick="joinPrivate()" style="width:100%;margin-bottom:6px;font-size:11px;padding:7px">Join Room</button>
+        <button class="btn-gen" onclick="genCode()" style="width:100%;font-size:11px;padding:7px">Generate Code</button>
+      </div>
+      <div class="chat-sidebar-section" id="private-rooms-section" style="margin-top:4px;display:none">MY PRIVATE ROOMS</div>
+      <div id="private-rooms-list"></div>
     </div>
 
-    <div id="chat-room-view">
+    <!-- Main chat panel -->
+    <div class="chat-main" id="chat-main-empty">
+      <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:12px;color:var(--muted)">
+        <div style="font-size:48px">💬</div>
+        <div style="font-size:16px;font-weight:600">Pick a room to start chatting</div>
+        <div style="font-size:12px">Public rooms are always on. Private rooms need a code.</div>
+        <div id="firebase-status" style="font-size:11px;margin-top:8px">⏳ Connecting to server…</div>
+      </div>
+    </div>
+    <div class="chat-main" id="chat-room-view" style="display:none;flex-direction:column">
       <div class="chat-header">
-        <button class="back-btn" onclick="leaveRoom()">
-          <svg viewBox="0 0 24 24"><polyline points="15,18 9,12 15,6"/></svg> Leave
-        </button>
+        <span class="ch-hash" style="color:var(--accent);font-size:18px">#</span>
         <span class="chat-room-name" id="room-label">Room</span>
         <span class="chat-code-tag" id="room-code-tag" style="display:none"></span>
-        <span id="chat-online-count" style="font-size:11px;color:var(--muted)"></span>
+        <span id="chat-online-count" style="font-size:11px;color:var(--muted);margin-left:auto"></span>
       </div>
       <div class="chat-msgs" id="chat-msgs"></div>
       <div class="chat-input-bar">
-        <input type="text" id="msg-input" placeholder="Send a message…" onkeydown="if(event.key==='Enter')sendMsg()" maxlength="300">
+        <input type="text" id="msg-input" placeholder="Message…" onkeydown="if(event.key==='Enter')sendMsg()" maxlength="300">
         <button class="send-btn" onclick="sendMsg()">
           <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22,2 15,22 11,13 2,9"/></svg>
         </button>
@@ -2039,6 +2142,7 @@ html, body {
           <span class="field-label">Change Password</span>
           <input class="field-input" id="p-newpass" type="password" placeholder="New password">
           <button class="field-btn" style="margin-top:8px" onclick="changePassword()">Update Password</button>
+          <button class="field-btn" style="margin-top:8px;background:transparent;border:1px solid #ff4444;color:#ff4444" onclick="doLogout()">Log Out</button>
         </div>
       </div>
     </div>
@@ -2070,6 +2174,11 @@ html, body {
       <div class="titles-label" style="margin-bottom:10px;margin-top:16px">🔥 Most Played</div>
       <div class="game-chips" id="profile-most-played"><span style="color:var(--muted);font-size:12px">Play some games to see them here!</span></div>
     </div>
+
+    <div class="pcard" style="margin-top:0;flex-direction:column">
+      <div class="titles-label" style="margin-bottom:10px">🤝 Friends</div>
+      <div id="friends-list"><div style="color:var(--muted);font-size:12px">Loading…</div></div>
+    </div>
   </div>
 
   <!-- SETTINGS -->
@@ -2087,7 +2196,7 @@ html, body {
       <div class="setting-section-label">Background Animation</div>
       <div class="bg-grid" id="bg-grid"></div>
       <div class="setting-row" style="margin-top:14px">
-        <span>Performance Mode (disable animations)</span>
+        <span>Performance Mode <span style="color:var(--muted);font-size:11px">(reduces glow &amp; slows animations to save battery)</span></span>
         <label class="tog"><input type="checkbox" id="perf-mode" onchange="togglePerfMode(this.checked)"><div class="tog-track"></div></label>
       </div>
     </div>
@@ -2159,9 +2268,34 @@ html, body {
     <div id="admin-panel-content" style="overflow-y:auto;flex:1;padding:16px 36px 36px"></div>
   </div>
 
+
+  <!-- NEWS DETAIL MODAL -->
+  <div id="news-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:9000;align-items:center;justify-content:center" onclick="if(event.target===this)closeNewsModal()">
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:18px;padding:32px 36px;max-width:560px;width:90%;position:relative;max-height:80vh;overflow-y:auto">
+      <button onclick="closeNewsModal()" style="position:absolute;top:14px;right:18px;background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;line-height:1">✕</button>
+      <div id="news-modal-tag" style="display:inline-block;padding:3px 10px;background:var(--accent-glow);color:var(--accent);border-radius:999px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:12px"></div>
+      <div id="news-modal-title" style="font-size:22px;font-weight:800;margin-bottom:8px;line-height:1.3"></div>
+      <div id="news-modal-date" style="font-size:11px;color:var(--muted);margin-bottom:16px"></div>
+      <div id="news-modal-body" style="font-size:14px;color:var(--text);line-height:1.8"></div>
+    </div>
+  </div>
 </div><!-- end #content -->
 
 <script>
+// One-time data reset (v5 fresh start — clears old accounts and chat)
+(function() {
+  if (!localStorage.getItem('t_v6_reset')) {
+    localStorage.removeItem('t_users');
+    localStorage.removeItem('t_current_user');
+    localStorage.removeItem('t_chat_rooms');
+    localStorage.setItem('t_v5_reset', '1');
+    localStorage.setItem('t_v6_reset', '1');
+  }
+  // Always set the Gemini key so AI just works
+  if (!localStorage.getItem('t_gemini_key')) {
+    localStorage.setItem('t_gemini_key', 'AIzaSyBJ6fb_OAJ4FWNdgmddFVAXLetrCz5F5W4');
+  }
+})();
 // ═══════════════════════════════════════════════════════
 // GAMES DATABASE
 // ═══════════════════════════════════════════════════════
@@ -2208,7 +2342,7 @@ function getSnowRiderHTML() {
 // NEWS DATA — edit to update news
 // ═══════════════════════════════════════════════════════
 const NEWS = [
-  {tag:"NEW", title:"Trickiest v2.0 Launches!", body:"Major redesign with new themes, profile system, titles, and real AI chat. Welcome to the new era.", date:"Today"},
+  {tag:"NEW", title:"Trickiest v2.0 Launches!", body:"Major redesign with new themes, profile system, titles, and real AI chat. Welcome to the new era.", date:"Today", detail:"Trickiest v2.0 is a complete ground-up redesign.\n\nWhat's new:\n• Discord-style chat with real Firebase sync\n• AI powered by Gemini 2.0\n• Profile system with unlockable titles\n• 9+ colour themes\n• Background animations including Cherry Blossom and Bubbles\n• Tab cloaking and panic key\n• Snow Rider 3D and more games\n• Admin panel for the owner\n\nMore updates coming soon!"},
   {tag:"GAMES", title:"10 new games added this week", body:"Slope, Shell Shockers, and more have been added to the library. Check the games page!", date:"Today"},
   {tag:"CHAT", title:"Chatrooms now support titles and real-time sync", body:"Messages now show your equipped title badge and sync across sessions.", date:"1 day ago"},
   {tag:"AI", title:"Local AI powered by Claude API", body:"The AI page now uses a real language model instead of redirecting to ChatGPT.", date:"2 days ago"},
@@ -2217,16 +2351,14 @@ const NEWS = [
 
 const ALL_TITLES = [
   {id:"newbie",   label:"Newbie",        minTime:0,   special:false},
-  {id:"nerd",     label:"Nerd",          minTime:15,  special:false},
-  {id:"bored",    label:"Bored in class",minTime:30,  special:false},
-  {id:"gamer",    label:"Gamer",         minTime:60,  special:false},
-  {id:"nerd",     label:"Aurafarmer",    minTime:100,  special:false},
+  {id:"bored",    label:"Bored in Class",minTime:10,  special:false},
+  {id:"gamer",    label:"Gamer",         minTime:30,  special:false},
+  {id:"nerd",     label:"Nerd",          minTime:60,  special:false},
   {id:"champ",    label:"Champ",         minTime:120, special:false},
   {id:"legend",   label:"Legend",        minTime:300, special:false},
   {id:"sleepless",label:"No Life",       minTime:600, special:false},
-  {id:"sleepless",label:"60 Missed Assignments", minTime:1000, special:false},
-  {id:"speedrun", label:"Speedrunner",   minTime:0,   gamesMin:5, special:false},
-  {id:"collector",label:"Collector",     minTime:0,   gamesMin:15,  special:false},
+  {id:"speedrun", label:"Speedrunner",   minTime:0,   gamesMin:10, special:false},
+  {id:"collector",label:"Collector",     minTime:0,   gamesMin:5,  special:false},
   {id:"trickster",label:"Trickster",     minTime:180, special:false},
   {id:"admin",    label:"ADMIN",         minTime:0,   special:true, forUser:"__admin__"},
   {id:"owner",    label:"OWNER",         minTime:0,   special:true, forUser:"sully"},
@@ -2252,6 +2384,18 @@ const THEMES_LIST = [
   {id:"blossom",    name:"Blossom",    bg:"#0f060a", accent:"#ff80aa",  textColor:"#ff80aa"},
 ];
 
+const CAPTIONS = [
+  "bored in class? same 💀",
+  "how's that math homework going?",
+  "teacher's not watching 👀",
+  "pretend you're researching something",
+  "learning... kinda 😅",
+  "the wifi's hitting different today",
+  "certified school escape route 🎮",
+  "3rd period never felt so fast",
+  "your chrome history is wild rn",
+  "studying for the vibe test"
+];
 const BG_ANIMS = [
   {id:"none",    name:"None",           draw:null},
   {id:"stars",   name:"Stars",          draw:"stars"},
@@ -2266,11 +2410,14 @@ const BG_ANIMS = [
 
 const CLOAK_PRESETS = [
   {name:"Google Classroom", icon:"https://www.gstatic.com/classroom/logo_square_rounded.svg",  title:"Google Classroom"},
+  {name:"None",             icon:"",                                                             title:""},
+  {name:"Google Docs",      icon:"https://www.gstatic.com/images/branding/product/1x/docs_48dp.png", title:"Google Docs"},
+  {name:"New Tab",          icon:"",                                                             title:"New Tab"},
   {name:"Google",           icon:"https://www.google.com/favicon.ico",                          title:"Google"},
   {name:"Google Drive",     icon:"https://ssl.gstatic.com/images/branding/product/1x/drive_2020q4_32dp.png", title:"Google Drive"},
-  {name:"Kahoot",           icon:"https://kahoot.com/favicon.ico",                              title:"Kahoot!"},
+  {name:"Kahoot",           icon:"https://kahoot.it/assets/img/favicon.ico",                    title:"Kahoot!"},
   {name:"Blooket",          icon:"https://www.blooket.com/favicon.ico",                         title:"Blooket"},
-  {name:"Edpuzzle",         icon:"https://edpuzzle.imgix.net/favicons/favicon-32x32.png",      title:"Edpuzzle"},
+  {name:"Edpuzzle",         icon:"https://edpuzzle.com/favicon.ico",                            title:"Edpuzzle"},
   {name:"i-Ready",          icon:"https://www.curriculumassociates.com/favicon.ico",            title:"i-Ready"},
   {name:"Canvas",           icon:"https://du11hjcvx0uqb.cloudfront.net/dist/images/favicon-e10d657a73.ico", title:"Canvas"},
 ];
@@ -2320,6 +2467,12 @@ function doRegister() {
   bootApp(user);
 }
 
+function doLogout() {
+  if (!confirm('Log out?')) return;
+  localStorage.removeItem('t_current_user');
+  location.reload();
+}
+
 function changePassword() {
   const user = getCurrentUser();
   const newpass = document.getElementById('p-newpass').value;
@@ -2344,6 +2497,12 @@ function saveUserData(data) {
 }
 
 function bootApp(username) {
+  // Ensure current user exists in the users store (for admin panel visibility)
+  const users = getUsers();
+  if (!users[username]) {
+    users[username] = { pass: '', color: '#ff4d9e', equippedTitle: 'newbie', timePlayed: 0, gamesPlayed: 0 };
+    saveUsers(users);
+  }
   document.getElementById('login-overlay').style.display = 'none';
   document.getElementById('nav').style.display = '';
   document.getElementById('content').style.display = '';
@@ -2362,6 +2521,9 @@ function bootApp(username) {
   startTimerTracking();
   applyAutoblank();
   applyBGAnim(localStorage.getItem('t_bg_anim') || 'stars');
+  // Random caption on home
+  const cap = document.getElementById('home-caption');
+  if (cap) cap.textContent = CAPTIONS[Math.floor(Math.random() * CAPTIONS.length)];
 
   // Show admin panel button only for sully
   if (username === 'sully') {
@@ -2374,6 +2536,10 @@ function bootApp(username) {
   initFirebase();
   // Load saved Gemini key
   loadGeminiKey();
+  // Load AI chat sessions
+  loadAISessions();
+  // Render private rooms in sidebar
+  renderPrivateRoomsList();
 }
 
 // Auto-login if session exists
@@ -2585,10 +2751,13 @@ function openGame(e, name, file, url) {
   const d = getUserData();
   saveUserData({gamesPlayed: (d.gamesPlayed || 0) + 1});
 
-  // Track per-game play count
+  // Track per-game play count + clicks
   const plays = JSON.parse(localStorage.getItem('t_game_plays')||'{}');
   plays[name] = (plays[name] || 0) + 1;
   localStorage.setItem('t_game_plays', JSON.stringify(plays));
+  const clicks = JSON.parse(localStorage.getItem('t_game_clicks')||'{}');
+  clicks[name] = (clicks[name] || 0) + 1;
+  localStorage.setItem('t_game_clicks', JSON.stringify(clicks));
 
   // Navigate to gameview page directly (no nav-btn for it)
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
@@ -2717,7 +2886,7 @@ let carouselPos = 0;
 let carouselTimer;
 
 function buildCarousel() {
-  const sorted = [...GAMES].sort((a,b) => b.p - a.p).slice(0,10);
+  const sorted = [...GAMES].sort((a,b) => getPopularScore(b.n) - getPopularScore(a.n)).slice(0,3);
   const track = document.getElementById('carousel-track');
   if (!track) return;
   const gameDescs = {
@@ -2770,26 +2939,14 @@ function carouselShift(dir) {
 }
 
 function applyCarouselTransform() {
+  // With only 3 cards showing at once, no transform needed — they're always centred
   const track = document.getElementById('carousel-track');
-  if (!track) return;
-  const cards = track.querySelectorAll('.carousel-card');
-  const total = cards.length;
-  const CARD_W = 304;
-  // Infinite loop: duplicate cards virtually
-  // Shift so first visible card is carouselPos
-  const offset = carouselPos * CARD_W;
-  track.style.transform = `translateX(-${offset}px)`;
+  if (track) track.style.transform = '';
 }
 
 function startCarouselAuto() {
-  carouselTimer = setInterval(() => {
-    const track = document.getElementById('carousel-track');
-    if (!track) return;
-    const cards = track.querySelectorAll('.carousel-card');
-    const total = cards.length;
-    carouselPos = (carouselPos + 1) % total;
-    applyCarouselTransform();
-  }, 3500);
+  // Only 3 cards, all visible — no auto-scroll needed
+  clearInterval(carouselTimer);
 }
 
 function resetCarouselAuto() {
@@ -2803,22 +2960,39 @@ function resetCarouselAuto() {
 function buildHomeNews() {
   const grid = document.getElementById('home-news-grid');
   if (!grid) return;
-  grid.innerHTML = NEWS.slice(0,4).map(n => `
-    <div class="news-card" onclick="nav(document.querySelector('[data-page=news]'))">
+  grid.innerHTML = NEWS.slice(0,4).map((n,i) => `
+    <div class="news-card" onclick="openNewsItem(${i})">
       <div class="news-card-tag">${n.tag}</div>
       <div class="news-card-title">${n.title}</div>
       <div class="news-card-date">${n.date}</div>
     </div>`).join('');
 }
 
+
+function openNewsItem(idx) {
+  const n = NEWS[idx];
+  if (!n) return;
+  document.getElementById('news-modal-tag').textContent = n.tag;
+  document.getElementById('news-modal-title').textContent = n.title;
+  document.getElementById('news-modal-date').textContent = n.date;
+  document.getElementById('news-modal-body').innerHTML = (n.detail || n.body).replace(/\n/g, '<br>');
+  const modal = document.getElementById('news-modal');
+  modal.style.display = 'flex';
+}
+
+function closeNewsModal() {
+  document.getElementById('news-modal').style.display = 'none';
+}
+
 function buildNewsPage() {
   const list = document.getElementById('news-list');
   if (!list) return;
-  list.innerHTML = NEWS.map(n => `
-    <div class="news-item">
+  list.innerHTML = NEWS.map((n,i) => `
+    <div class="news-item" style="cursor:pointer" onclick="openNewsItem(${i})">
       <div class="news-item-header">
         <span class="news-item-tag">${n.tag}</span>
         <span class="news-item-date">${n.date}</span>
+        <span style="margin-left:auto;font-size:11px;color:var(--accent)">Read more →</span>
       </div>
       <div class="news-item-title">${n.title}</div>
       <div class="news-item-body">${n.body}</div>
@@ -2897,7 +3071,102 @@ function bPopout()  {
 // AI (Claude API via Anthropic — works in Claude artifacts)
 // ═══════════════════════════════════════════════════════
 let aiHistory = [];
+let curAIModel = 'gpt-4o-mini';
 
+// ═══════════════════════════════════════════════════════
+// AI — Multi-model (OpenAI + Gemini)
+// Keys stored in localStorage, hardcoded defaults provided
+// ═══════════════════════════════════════════════════════
+const AI_SYSTEM = "You are Trickiest AI, built into an unblocked games site called Trickiest. Be helpful, fun, and casual. You know about games, homework help, memes, and general knowledge. Keep replies concise unless asked for detail.";
+
+// Default keys (users can override in sidebar)
+const DEFAULT_OPENAI_KEY  = 'sk-proj-dP2-DPhxswGLKWZSUiYfSU_1IfjdAgmzBZk0DisEM6Iv9k8ABGUad4ioCU-7vgrrKpKynKoKOST3BlbkFJW564WJuCsWmQjDaddH9KUNr0EOMtZFBa6w9FZ8nrBR0WYq7sHBuONZ9is05vGe65Xsk1e8D4A';
+const DEFAULT_GEMINI_KEY  = 'AIzaSyBJ6fb_OAJ4FWNdgmddFVAXLetrCz5F5W4';
+
+function getOpenAIKey()  { return localStorage.getItem('t_openai_key')  || DEFAULT_OPENAI_KEY; }
+function getGeminiKey()  { return localStorage.getItem('t_gemini_key')  || DEFAULT_GEMINI_KEY; }
+
+function saveAPIKeys() {
+  const oaiVal = (document.getElementById('openai-key-input')?.value || '').trim();
+  const gemVal = (document.getElementById('gemini-key-input')?.value || '').trim();
+  if (oaiVal) { localStorage.setItem('t_openai_key', oaiVal); }
+  if (gemVal) { localStorage.setItem('t_gemini_key', gemVal); }
+  showToast('Keys saved ✅');
+  setTimeout(() => {
+    const o = document.getElementById('openai-key-input');
+    const g = document.getElementById('gemini-key-input');
+    if (o) o.value = '';
+    if (g) g.value = '';
+  }, 800);
+}
+
+// Keep old name working
+function saveGeminiKey() { saveAPIKeys(); }
+function loadGeminiKey() {}  // no-op, keys loaded on demand
+
+function selectAIModel(btn) {
+  document.querySelectorAll('.ai-model-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  curAIModel = btn.dataset.model;
+  const isGemini = curAIModel.startsWith('gemini');
+  const dot   = document.getElementById('ai-status-dot');
+  const label = document.getElementById('ai-status-text');
+  if (dot)   dot.style.background   = isGemini ? '#4ade80' : '#60a5fa';
+  if (label) label.textContent = btn.textContent.trim();
+}
+
+async function callOpenAI(messages, model) {
+  const key = getOpenAIKey();
+  const resp = await fetch('https://api.openai.com/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${key}`
+    },
+    body: JSON.stringify({
+      model,
+      messages: [
+        { role: 'system', content: AI_SYSTEM },
+        ...messages.map(m => ({ role: m.role === 'assistant' ? 'assistant' : 'user', content: m.content }))
+      ],
+      max_tokens: 1000,
+      temperature: 0.8
+    })
+  });
+  if (!resp.ok) {
+    const err = await resp.json().catch(() => ({}));
+    throw new Error(err?.error?.message || `OpenAI ${resp.status}`);
+  }
+  const data = await resp.json();
+  return data.choices?.[0]?.message?.content || null;
+}
+
+async function callGemini(messages, model) {
+  const key = getGeminiKey();
+  // Build Gemini conversation format
+  const geminiMsgs = messages.map(m => ({
+    role: m.role === 'assistant' ? 'model' : 'user',
+    parts: [{ text: m.content }]
+  }));
+  const resp = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        systemInstruction: { parts: [{ text: AI_SYSTEM }] },
+        contents: geminiMsgs,
+        generationConfig: { maxOutputTokens: 1000, temperature: 0.8 }
+      })
+    }
+  );
+  if (!resp.ok) {
+    const err = await resp.json().catch(() => ({}));
+    throw new Error(err?.error?.message || `Gemini ${resp.status}`);
+  }
+  const data = await resp.json();
+  return data?.candidates?.[0]?.content?.parts?.[0]?.text || null;
+}
 
 async function sendAI() {
   const inp = document.getElementById('ai-input');
@@ -2907,121 +3176,89 @@ async function sendAI() {
   inp.style.height = 'auto';
 
   addAIBubble('user', null, text);
-  aiHistory.push({role:'user', content: text});
+  aiHistory.push({ role: 'user', content: text });
 
+  // Show loading indicator
   const loadId = 'ai-load-' + Date.now();
   const area = document.getElementById('ai-chat-area');
   const loadDiv = document.createElement('div');
   loadDiv.id = loadId;
   loadDiv.className = 'ai-bubble ai';
-  loadDiv.innerHTML = '<div class="ai-who">Trickiest AI</div><div class="ai-loading"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div></div>';
+  loadDiv.innerHTML = `<div class="ai-who">${curAIModel}</div><div class="ai-loading"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div></div>`;
   area.appendChild(loadDiv);
   area.scrollTop = area.scrollHeight;
 
-  // Gemini API — works from browser (CORS allowed), free tier available
-  const GEMINI_KEY = localStorage.getItem('t_gemini_key') || '';
   let reply = null;
+  const isGemini = curAIModel.startsWith('gemini');
 
-  if (GEMINI_KEY) {
-    try {
-      const geminiMsgs = [];
-      for (let i = 0; i < aiHistory.length - 1; i++) {
-        geminiMsgs.push({
-          role: aiHistory[i].role === 'assistant' ? 'model' : 'user',
-          parts: [{text: aiHistory[i].content}]
-        });
-      }
-      geminiMsgs.push({role:'user', parts:[{text}]});
-
-      const resp = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_KEY}`,
-        {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({
-            systemInstruction: {
-              parts: [{text: "You are Trickiest AI, a fun, helpful, slightly edgy assistant built into an unblocked games website called Trickiest. Be casual, helpful, and entertaining. Keep answers concise."}]
-            },
-            contents: geminiMsgs,
-            generationConfig: {maxOutputTokens: 800, temperature: 0.9}
-          })
-        }
-      );
-      if (resp.ok) {
-        const data = await resp.json();
-        reply = data?.candidates?.[0]?.content?.parts?.[0]?.text || null;
-      } else {
-        const err = await resp.json().catch(() => ({}));
-        console.warn('Gemini error:', err);
-      }
-    } catch(err) {
-      console.warn('Gemini fetch failed:', err);
+  try {
+    if (isGemini) {
+      reply = await callGemini(aiHistory, curAIModel);
+    } else {
+      reply = await callOpenAI(aiHistory, curAIModel);
     }
-  }
-
-  // Smart local fallback (always works, no API needed)
-  if (!reply) {
-    reply = getLocalAIReply(text, !GEMINI_KEY);
+  } catch (err) {
+    console.error('AI error:', err);
+    reply = `⚠️ ${err.message || 'Something went wrong'}. Try a different model or check your key.`;
   }
 
   document.getElementById(loadId)?.remove();
-  addAIBubble('ai', 'Trickiest AI', reply);
-  aiHistory.push({role:'assistant', content: reply});
-}
 
-function getLocalAIReply(text, noKey) {
-  if (noKey) {
-    return "Add your free Gemini API key to get real AI answers! Go to aistudio.google.com/apikey, copy your key, then paste it in the box above and click Save 🔑";
+  if (!reply) reply = "Hmm, I got nothing back. Try again?";
+
+  // Format markdown-like replies (bold, code, lists)
+  const formatted = formatAIReply(reply);
+  addAIBubble('ai', curAIModel, formatted, true);
+  aiHistory.push({ role: 'assistant', content: reply });
+
+  // Auto-save session
+  const cur = aiSessions.find(s => s.id === curAISession);
+  if (cur) {
+    cur.messages = aiHistory.map(m => ({ ...m }));
+    if (aiHistory.length === 2) cur.title = aiHistory[0]?.content?.slice(0, 32) || 'Chat';
+    saveAISessions();
   }
-  const t = text.toLowerCase();
-  if (t.includes('game') || t.includes('play')) return "Check out Slope, Minecraft Classic or Krunker — all absolute bangers 🎮";
-  if (t.includes('homework') || t.includes('math')) return "I got you, what's the question? 📚";
-  if (t.includes('hello') || t.includes('hi') || t.includes('hey')) return "Hey! What's good? Ask me anything 👋";
-  if (t.includes('bored')) return "Go play Slope rn. Seriously. Or tell me what's up?";
-  if (t.includes('who are you')) return "Trickiest AI — your built-in game buddy 🤖";
-  return "That's a vibe. Ask me something — games, homework, whatever 😂";
 }
 
+function formatAIReply(text) {
+  // Basic markdown formatting
+  return text
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/```[\w]*\n?([\s\S]*?)```/g, '<pre style="background:var(--bg3);border-radius:8px;padding:10px 12px;margin:6px 0;font-size:12px;overflow-x:auto;font-family:Space Mono,monospace;white-space:pre-wrap">$1</pre>')
+    .replace(/`([^`]+)`/g, '<code style="background:var(--bg3);padding:2px 6px;border-radius:4px;font-family:Space Mono,monospace;font-size:12px">$1</code>')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g, '<em>$1</em>')
+    .replace(/^- (.+)$/gm, '<li style="margin-left:16px">$1</li>')
+    .replace(/\n\n/g, '<br><br>')
+    .replace(/\n/g, '<br>');
+}
 
-function addAIBubble(role, who, text) {
+function addAIBubble(role, who, text, isHTML) {
   const area = document.getElementById('ai-chat-area');
+  if (!area) return;
   const d = document.createElement('div');
-  d.className = 'ai-bubble ' + role;
-  d.innerHTML = (role === 'ai' ? `<div class="ai-who">${who}</div>` : '') + esc(text);
+  d.className = 'ai-bubble ' + (role === 'user' ? 'user' : 'ai');
+  if (role !== 'user' && who) {
+    const modelLabel = document.createElement('div');
+    modelLabel.className = 'ai-who';
+    modelLabel.textContent = who;
+    d.appendChild(modelLabel);
+  }
+  const body = document.createElement('div');
+  if (isHTML) { body.innerHTML = text; }
+  else { body.textContent = text; }
+  d.appendChild(body);
   area.appendChild(d);
   area.scrollTop = area.scrollHeight;
 }
 
-function loadGeminiKey() {
-  const key = localStorage.getItem('t_gemini_key') || '';
-  const inp = document.getElementById('gemini-key-input');
-  if (inp) {
-    if (key) inp.value = key;
-    inp.placeholder = key ? '✅ Key saved — AI is active!' : 'Paste Gemini API key here…';
-  }
-}
-
-function saveGeminiKey() {
-  const key = (document.getElementById('gemini-key-input')?.value || '').trim();
-  if (key) {
-    localStorage.setItem('t_gemini_key', key);
-    const inp = document.getElementById('gemini-key-input');
-    if (inp) inp.placeholder = '✅ Key saved — AI is active!';
-    showToast('✅ Gemini key saved! AI is ready.');
-    // Clear the input for security but keep stored
-    setTimeout(() => { if (inp) inp.value = ''; }, 1000);
-  } else {
-    localStorage.removeItem('t_gemini_key');
-    showToast('Key removed');
-  }
-}
-
-
-
 function clearAI() {
   aiHistory = [];
   const area = document.getElementById('ai-chat-area');
-  area.innerHTML = '<div class="ai-bubble ai"><div class="ai-who">Trickiest AI</div>Chat cleared! What\'s up?</div>';
+  area.innerHTML = `<div class="ai-bubble ai"><div class="ai-who">Trickiest AI</div>Chat cleared! Pick a model and ask away.</div>`;
+  // Save clear to session
+  const cur = aiSessions.find(s => s.id === curAISession);
+  if (cur) { cur.messages = []; cur.title = 'New Chat'; saveAISessions(); }
 }
 
 // Auto-resize textarea
@@ -3031,6 +3268,70 @@ document.addEventListener('input', e => {
     e.target.style.height = Math.min(e.target.scrollHeight, 120) + 'px';
   }
 });
+
+
+let curAISession = 0;
+
+function loadAISessions() {
+  try { aiSessions = JSON.parse(localStorage.getItem('t_ai_sessions')||'[]'); } catch(e) { aiSessions = []; }
+  if (!aiSessions.length) aiSessions = [{id:0, title:'New Chat', messages:[]}];
+  renderAIChatsList();
+}
+
+function saveAISessions() {
+  // Keep last 20 sessions
+  if (aiSessions.length > 20) aiSessions = aiSessions.slice(-20);
+  localStorage.setItem('t_ai_sessions', JSON.stringify(aiSessions));
+  renderAIChatsList();
+}
+
+function renderAIChatsList() {
+  const list = document.getElementById('ai-chats-list');
+  if (!list) return;
+  list.innerHTML = aiSessions.slice().reverse().map(s => `
+    <div class="chat-channel-row${s.id===curAISession?' active':''}" onclick="loadAISession(${s.id})" style="flex-direction:column;align-items:flex-start;gap:0">
+      <span style="font-size:12px;font-weight:600;width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${s.title||'Chat'}</span>
+      <span style="font-size:10px;color:var(--muted)">${s.messages.length} messages</span>
+    </div>`).join('');
+}
+
+function newAIChat() {
+  // Save current session first
+  const cur = aiSessions.find(s=>s.id===curAISession);
+  if (cur && aiHistory.length) {
+    cur.messages = aiHistory.map(m=>({...m}));
+    cur.title = aiHistory[0]?.content?.slice(0,30) || 'Chat';
+  }
+  const newId = Date.now();
+  aiSessions.push({id:newId, title:'New Chat', messages:[]});
+  curAISession = newId;
+  aiHistory = [];
+  saveAISessions();
+  const area = document.getElementById('ai-chat-area');
+  if (area) area.innerHTML = `<div class="ai-bubble ai"><div class="ai-who">Trickiest AI</div>Fresh start! Ask me anything.</div>`;
+  document.getElementById('ai-chat-title').textContent = 'New Chat';
+}
+
+function loadAISession(id) {
+  // Save current
+  const cur = aiSessions.find(s=>s.id===curAISession);
+  if (cur) { cur.messages = aiHistory.map(m=>({...m})); }
+  // Load selected
+  curAISession = id;
+  const session = aiSessions.find(s=>s.id===id);
+  if (!session) return;
+  aiHistory = (session.messages||[]).map(m=>({...m}));
+  const area = document.getElementById('ai-chat-area');
+  if (!area) return;
+  area.innerHTML = '';
+  if (!aiHistory.length) {
+    area.innerHTML = `<div class="ai-bubble ai"><div class="ai-who">Trickiest AI</div>Hey! Ask me anything.</div>`;
+  } else {
+    aiHistory.forEach(m => addAIBubble(m.role==='user'?'user':'ai', m.role==='assistant'?curAIModel:null, m.content, false));
+  }
+  renderAIChatsList();
+  area.scrollTop = area.scrollHeight;
+}
 
 
 // ═══════════════════════════════════════════════════════
@@ -3069,13 +3370,17 @@ async function initFirebase() {
     firebaseDB = firebase.database();
     console.log('Firebase connected ✅');
     const statusEl = document.getElementById('firebase-status');
-    if (statusEl) { statusEl.textContent = '🟢 Chat server connected — messages sync across all devices!'; statusEl.style.color = '#4ade80'; }
+    if (statusEl) { statusEl.textContent = '🟢 Connected — messages sync in real time!'; statusEl.style.color = '#4ade80'; }
+    const iconEl = document.getElementById('firebase-status-icon');
+    if (iconEl) { iconEl.textContent = '🟢'; iconEl.title = 'Connected'; }
     // Update online counts
     updateOnlineCount();
   } catch(e) {
     console.warn('Firebase unavailable, using localStorage fallback:', e.message);
     const statusEl = document.getElementById('firebase-status');
-    if (statusEl) { statusEl.textContent = '🟡 Local mode — messages only sync on this device/tab.'; statusEl.style.color = '#fbbf24'; }
+    if (statusEl) { statusEl.textContent = '🟡 Local mode — no cross-device sync.'; statusEl.style.color = '#fbbf24'; }
+    const iconEl = document.getElementById('firebase-status-icon');
+    if (iconEl) { iconEl.textContent = '🟡'; iconEl.title = 'Local only'; }
     firebaseDB = null;
   }
 }
@@ -3099,20 +3404,26 @@ function saveChatStore(s) { localStorage.setItem('t_chat_rooms', JSON.stringify(
 
 function joinRoom(id, label, isPrivate) {
   const upperID = id.toUpperCase();
-  if (upperID === SECRET_ROOM) { id = SECRET_ROOM; label = '🔐 Secret Room'; isPrivate = true; }
+  if (upperID === 'SULLYE') { id = 'SULLYE'; label = '🔐 Secret Room'; isPrivate = true; }
   else if (isPrivate) {
     const created = getCreatedRooms();
     const store = getChatStore();
-    if (!created.includes(upperID) && !store[upperID] && !VALID_PRIVATE_ROOMS.includes(upperID)) {
-      showToast('❌ Room not found. Generate a code first!');
-      return;
+    if (!created.includes(upperID) && !store[upperID] && !['SULLYE'].includes(upperID)) {
+      showToast('❌ Room not found. Generate a code first!'); return;
     }
     id = upperID;
   }
   curRoom = {id, label, isPrivate};
-  document.getElementById('chat-lobby-view').style.display = 'none';
+
+  // Update sidebar active state
+  document.querySelectorAll('.chat-channel-row').forEach(r => r.classList.remove('active'));
+  const ch = document.getElementById('ch-' + id.toLowerCase());
+  if (ch) ch.classList.add('active');
+
+  // Show chat panel
+  document.getElementById('chat-main-empty').style.display = 'none';
   const rv = document.getElementById('chat-room-view');
-  rv.classList.add('visible');
+  rv.style.display = 'flex';
   document.getElementById('room-label').textContent = label;
   const tag = document.getElementById('room-code-tag');
   if (isPrivate) { tag.textContent = '🔒 ' + id; tag.style.display = ''; }
@@ -3121,69 +3432,53 @@ function joinRoom(id, label, isPrivate) {
   document.getElementById('chat-msgs').innerHTML = '';
 
   if (firebaseDB) {
-    // ── FIREBASE PATH ──
-    // Remove old listener
     if (chatUnsubscribe) { chatUnsubscribe(); chatUnsubscribe = null; }
     const roomRef = firebaseDB.ref('rooms/' + id + '/messages');
-    // Load last 100 messages and listen for new ones
     let joinTime = Date.now();
     roomRef.limitToLast(100).on('child_added', snap => {
       const m = snap.val();
       if (!m) return;
-      // Show historical messages for everyone; for live messages skip own (shown optimistically)
-      if (m.who === myName && m.ts > joinTime) return;
+      if (m.who === myName && m.ts > joinTime) return; // shown optimistically
       const type = m.who === myName ? 'me' : 'other';
       addMsg({type, who: m.who, text: m.text, titleBadge: m.titleBadge, ts: m.ts});
     });
     chatUnsubscribe = () => roomRef.off();
-    // Mark user online
     const presRef = firebaseDB.ref('rooms/' + id + '/online/' + myName);
     presRef.set({name: myName, ts: Date.now()});
     presRef.onDisconnect().remove();
-    // Update online count
     firebaseDB.ref('rooms/' + id + '/online').on('value', snap => {
       const count = snap.numChildren ? snap.numChildren() : 0;
-      updateOnlineCountUI(id, count);
+      const el = document.getElementById('chat-online-count');
+      if (el) el.textContent = count + ' online';
     });
     sysMsg('Connected to ' + label + ' 🔥');
   } else {
-    // ── LOCALSTORAGE FALLBACK ──
     const store = getChatStore();
     const roomData = store[id] || {messages:[], lastActivity: Date.now()};
-    if (isPrivate && id !== SECRET_ROOM && Date.now() - (roomData.lastActivity||0) > 172800000) {
+    if (isPrivate && id !== 'SULLYE' && Date.now() - (roomData.lastActivity||0) > 172800000) {
       store[id] = {messages:[], lastActivity: Date.now()};
       saveChatStore(store);
       sysMsg('Room created. Share code: ' + id);
     } else {
       (roomData.messages || []).forEach(m => addMsg(m));
-      sysMsg('Joined ' + label + ' (local mode — no cross-device sync)');
+      sysMsg('Joined ' + label + ' (local only — no cross-device sync)');
     }
-    scrollMsgs();
     startChatPoll();
-    if (chatChannel) {
-      chatChannel.onmessage = (e) => {
-        if (e.data.room === curRoom?.id && e.data.sender !== myName) {
-          addMsg({type:'other', who:e.data.sender, text:e.data.text, titleBadge:e.data.titleBadge, ts:e.data.ts});
-          scrollMsgs();
-        }
-      };
-    }
   }
-  updateOnlineCount();
+  document.getElementById('msg-input')?.focus();
 }
 
 
 function leaveRoom() {
   if (chatUnsubscribe) { chatUnsubscribe(); chatUnsubscribe = null; }
   stopChatPoll();
-  // Remove presence from Firebase
   if (firebaseDB && curRoom) {
     firebaseDB.ref('rooms/' + curRoom.id + '/online/' + myName).remove().catch(()=>{});
   }
   curRoom = null;
-  document.getElementById('chat-room-view').classList.remove('visible');
-  document.getElementById('chat-lobby-view').style.display = '';
-  if (chatChannel) chatChannel.onmessage = null;
+  document.querySelectorAll('.chat-channel-row').forEach(r => r.classList.remove('active'));
+  document.getElementById('chat-room-view').style.display = 'none';
+  document.getElementById('chat-main-empty').style.display = '';
 }
 
 
@@ -3330,17 +3625,34 @@ function joinPrivate() {
 function genCode() {
   const code = String(Math.floor(100000 + Math.random()*900000));
   document.querySelectorAll('.cbox').forEach((b,i) => b.value = code[i] || '');
-  // Save so this code is valid to join
   saveCreatedRoom(code);
-  // Also pre-create the room in localStorage so it's joinable
   const store = getChatStore();
   if (!store[code]) { store[code] = {messages:[], lastActivity: Date.now()}; saveChatStore(store); }
+  showToast('Code: ' + code + ' — share it!');
+  // Show in sidebar
+  renderPrivateRoomsList();
+}
+
+function renderPrivateRoomsList() {
+  const created = getCreatedRooms();
+  const section = document.getElementById('private-rooms-section');
+  const list = document.getElementById('private-rooms-list');
+  if (!list) return;
+  if (created.length) {
+    if (section) section.style.display = '';
+    list.innerHTML = created.map(code => `
+      <div class="chat-channel-row" onclick="joinRoom('${code}','Room ${code}',true)">
+        <span class="ch-hash">🔒</span>
+        <span class="ch-name" style="font-size:12px">${code}</span>
+      </div>`).join('');
+  }
 }
 
 // ═══════════════════════════════════════════════════════
 // PROFILE
 // ═══════════════════════════════════════════════════════
 function loadProfile() {
+  renderFriendsList();
   const user = getCurrentUser();
   const d = getUserData();
   document.getElementById('p-name').value = user || '';
@@ -3412,32 +3724,96 @@ function uploadAvatar(inp) {
 // ═══════════════════════════════════════════════════════
 // USER PROFILE POPUP
 // ═══════════════════════════════════════════════════════
+
+// ════════════════════════════════════════
+// FRIENDS SYSTEM
+// ════════════════════════════════════════
+function getFriends() { try { return JSON.parse(localStorage.getItem('t_friends') || '[]'); } catch(e) { return []; } }
+function saveFriends(f) { localStorage.setItem('t_friends', JSON.stringify(f)); }
+
+function addFriend(username) {
+  if (username === myName) { showToast("Can't add yourself!"); return; }
+  const friends = getFriends();
+  if (friends.includes(username)) { showToast(username + " is already your friend!"); return; }
+  friends.push(username);
+  saveFriends(friends);
+  showToast("Added " + username + " as a friend! 🤝");
+  closeUserPopup();
+  renderFriendsList();
+}
+
+function removeFriend(username) {
+  const friends = getFriends().filter(f => f !== username);
+  saveFriends(friends);
+  showToast("Removed " + username);
+  renderFriendsList();
+}
+
+function renderFriendsList() {
+  const el = document.getElementById('friends-list');
+  if (!el) return;
+  const friends = getFriends();
+  if (!friends.length) {
+    el.innerHTML = '<div style="color:var(--muted);font-size:12px;padding:8px 0">No friends yet — click usernames in chat to add!</div>';
+    return;
+  }
+  el.innerHTML = friends.map(f => `
+    <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border)">
+      <div style="width:28px;height:28px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--bg1)">${f[0].toUpperCase()}</div>
+      <span style="flex:1;font-size:13px;font-weight:600">${f}</span>
+      <button class="admin-btn-sm danger" onclick="removeFriend('${f}')">Remove</button>
+    </div>`).join('');
+}
+
 function openUserPopup(username) {
+  if (!username || username === myName) return;
   const users = getUsers();
-  const u = users[username];
-  if (!u) return;
+  const u = users[username] || {};
+  const friends = getFriends();
+  const isFriend = friends.includes(username);
+
   const popup = document.getElementById('user-profile-popup');
-  const avatarEl = document.getElementById('popup-avatar');
-  avatarEl.style.background = u.color || '#ff4d9e';
-  if (u.avatarImg) {
-    avatarEl.innerHTML = `<img src="${u.avatarImg}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
-  } else {
-    avatarEl.textContent = username[0].toUpperCase();
+  if (!popup) return;
+  popup.classList.add('visible');
+
+  // Avatar
+  const av = document.getElementById('popup-avatar');
+  if (av) {
+    av.style.background = u.color || 'var(--accent)';
+    av.textContent = username[0].toUpperCase();
   }
   document.getElementById('popup-name').textContent = username;
-  const titleObj = ALL_TITLES.find(t => t.id === (u.equippedTitle || 'newbie'));
-  const badge = document.getElementById('popup-title-badge');
-  badge.textContent = titleObj ? titleObj.label : 'Newbie';
-  badge.style.display = titleObj ? '' : 'none';
-  const mins = u.timePlayed || 0;
-  const timeStr = mins >= 60 ? Math.floor(mins/60)+'h '+( mins%60)+'m' : mins+'m';
-  document.getElementById('popup-stats').textContent = `${timeStr} played · ${u.gamesPlayed||0} games`;
-  // Fav games — stored per-user in their own data? We track per-device.
-  const fchips = document.getElementById('popup-fav-games');
-  const favs = getFavorites(); // local favs for now
-  fchips.innerHTML = favs.slice(0,4).map(n => `<div class="game-chip">${n}</div>`).join('') || '<span style="color:var(--muted);font-size:12px">None</span>';
-  popup.classList.add('visible');
+  const tb = document.getElementById('popup-title-badge');
+  if (tb) tb.textContent = u.equippedTitle || '';
+
+  // Stats
+  const stats = document.getElementById('popup-stats');
+  if (stats) stats.textContent = (u.timePlayed || 0) + ' min played · ' + (u.gamesPlayed || 0) + ' games';
+
+  // Friend button
+  const existingBtn = document.getElementById('popup-friend-btn');
+  if (existingBtn) existingBtn.remove();
+  const box = document.querySelector('.user-popup-box');
+  if (box) {
+    const btn = document.createElement('button');
+    btn.id = 'popup-friend-btn';
+    btn.className = 'field-btn';
+    btn.style.cssText = 'width:100%;margin-top:12px;font-size:12px;padding:8px';
+    btn.textContent = isFriend ? '✅ Already Friends' : '+ Add Friend';
+    btn.disabled = isFriend;
+    if (!isFriend) btn.onclick = () => addFriend(username);
+    box.appendChild(btn);
+  }
+
+  // Fav games
+  const fgEl = document.getElementById('popup-fav-games');
+  const favs = u.favGames || [];
+  if (fgEl) fgEl.innerHTML = favs.length
+    ? favs.map(g => `<span class="game-chip">${g}</span>`).join('')
+    : '<span style="color:var(--muted);font-size:12px">None yet</span>';
 }
+
+
 function closeUserPopup() {
   document.getElementById('user-profile-popup').classList.remove('visible');
 }
@@ -3504,48 +3880,6 @@ function renderGames() {
   }).join('');
 }
 
-// Carousel uses actual play data too
-function buildCarousel() {
-  const sorted = [...GAMES].sort((a,b) => getPopularScore(b.n) - getPopularScore(a.n)).slice(0,10);
-  const track = document.getElementById('carousel-track');
-  if (!track) return;
-  const gameDescs = {
-    "Minecraft Classic": "Build and survive in blocky worlds",
-    "Slope": "Race a ball down an endless slope",
-    "Geometry Dash": "Rhythm-based platformer madness",
-    "Krunker": "Fast-paced browser FPS shooter",
-    "Run 3": "Run through space tunnels endlessly",
-    "Smash Karts": "Kart racing battle arena",
-    "Tetris": "Classic block-stacking puzzle game",
-    "Pac-Man": "Eat dots, dodge ghosts",
-    "Snake": "Grow your snake without hitting walls",
-    "Shell Shockers": "Egg-themed multiplayer shooter",
-    "1v1.LOL": "Build and battle 1v1",
-    "2048": "Slide tiles to reach 2048",
-    "Agar.io": "Eat cells and grow bigger",
-    "Chess": "Classic strategy board game",
-    "Cookie Clicker": "Click cookies, build an empire",
-    "Drift Boss": "Master the drift on a spinning track",
-    "Flappy Bird": "Tap to fly through pipes",
-    "Moto X3M": "Extreme motorbike stunt racing",
-    "Paper.io 2": "Capture territory on a map",
-    "Snow Rider 3D": "Sled down epic snowy mountains",
-  };
-  track.innerHTML = sorted.map((g,i) => {
-    const imgInner = g.img
-      ? `<img src="${g.img}" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0">`
-      : `<span style="font-size:80px">${g.e}</span>`;
-    return `
-    <div class="carousel-card" onclick="openGame(new Event('click'),'${escAttr(g.n)}','${escAttr(g.f||'')}','${escAttr(g.u)}')">
-      <div class="carousel-card-img" style="background:linear-gradient(145deg,${g.c}cc,${g.c}44);position:relative">${imgInner}</div>
-      <div class="carousel-card-name">${g.n}</div>
-      <div class="carousel-card-desc">${gameDescs[g.n] || 'A popular unblocked game'}</div>
-      <div class="carousel-rank">${i+1}</div>
-    </div>`;
-  }).join('');
-  startCarouselAuto();
-}
-
 // ═══════════════════════════════════════════════════════
 // ADMIN PANEL (sully only)
 // ═══════════════════════════════════════════════════════
@@ -3558,13 +3892,17 @@ function renderAdminPanel() {
   const topGames = Object.entries(plays).sort((a,b)=>b[1]-a[1]).slice(0,8);
 
   container.innerHTML = `
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+      <span style="font-size:18px;font-weight:700;color:var(--accent)">👑 Owner Panel</span>
+      <button class="admin-btn-sm" onclick="renderAdminPanel()" style="margin-left:auto">↻ Refresh</button>
+    </div>
     <div class="admin-panel" style="max-width:100%">
       <div class="admin-panel-title">👥 All Accounts (${Object.keys(users).length})</div>
       ${Object.entries(users).map(([uname, udata]) => `
         <div class="admin-user-row">
           <span class="admin-user-name">${uname}</span>
           ${udata.equippedTitle ? `<span class="admin-badge">${udata.equippedTitle}</span>` : ''}
-          <span style="font-size:11px;color:var(--muted)">${udata.timePlayed||0}m played</span>
+          <span style="font-size:11px;color:var(--muted)">${udata.timePlayed||0}m · ${udata.gamesPlayed||0} games</span>
           <button class="admin-btn-sm" onclick="adminGiveAdmin('${uname}')">Give Admin</button>
           ${udata.equippedTitle==='admin'||udata.unlockedTitles?.includes('admin') ? `<button class="admin-btn-sm danger" onclick="adminRemoveAdmin('${uname}')">Remove Admin</button>` : ''}
           <button class="admin-btn-sm danger" onclick="adminDeleteUser('${uname}')">Delete</button>
@@ -3685,16 +4023,15 @@ function applyBGAnim(id, el) {
 function togglePerfMode(on) {
   perfMode = on;
   localStorage.setItem('t_perfmode', on);
-  // Reduce glows in perf mode
   if (on) {
+    // Reduce glows site-wide
     document.documentElement.style.setProperty('--accent-glow','rgba(0,0,0,0)');
-    document.body.style.setProperty('filter','');
-    if (bgAnimFrame) cancelAnimationFrame(bgAnimFrame);
-    const canvas = document.getElementById('bg-canvas');
-    if (canvas) canvas.getContext('2d').clearRect(0,0,canvas.width,canvas.height);
+    document.documentElement.style.setProperty('filter','brightness(0.97)');
+    // Slow cherry/bubble intervals (don't stop canvas anims, just slow them)
     document.querySelectorAll('.blossom-petal, .bubble-particle').forEach(e=>e.remove());
   } else {
     document.documentElement.style.removeProperty('--accent-glow');
+    document.documentElement.style.removeProperty('filter');
     applyBGAnim(bgAnimMode);
   }
 }
@@ -3840,7 +4177,7 @@ function initBGAnim(canvas, mode) {
       if (perfMode) return;
       const el = document.createElement('div');
       el.className = 'bubble-particle';
-      const sz = 20+Math.random()*60;
+      const sz = 24+Math.random()*56;
       el.style.width = sz+'px'; el.style.height = sz+'px';
       el.style.left = Math.random()*100+'vw';
       el.style.bottom = '-80px';
@@ -3848,11 +4185,20 @@ function initBGAnim(canvas, mode) {
       el.style.animationDuration = dur+'s';
       el.style.setProperty('--drift', (Math.random()-0.5)*100+'px');
       el.style.borderColor = accentB;
+      el.style.cursor = 'pointer';
+      el.title = 'Pop!';
+      el.addEventListener('click', (e) => {
+        e.stopPropagation();
+        el.style.transition = 'transform 0.15s, opacity 0.15s';
+        el.style.transform = 'scale(1.8)';
+        el.style.opacity = '0';
+        setTimeout(()=>el.remove(), 160);
+      });
       document.body.appendChild(el);
-      setTimeout(()=>el.remove(), dur*1000);
+      setTimeout(()=>{ if(el.parentNode) el.remove(); }, dur*1000);
     }
-    const bubbleInt = setInterval(spawnBubble, 600);
-    spawnBubble();
+    const bubbleInt = setInterval(spawnBubble, perfMode ? 1200 : 600);
+    spawnBubble(); spawnBubble();
     canvas._cleanup = () => clearInterval(bubbleInt);
   } else if (mode === 'waves') {
     let t = 0;
